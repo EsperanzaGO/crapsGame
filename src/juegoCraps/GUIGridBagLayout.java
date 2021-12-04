@@ -72,6 +72,62 @@ public class GUIGridBagLayout extends JFrame {
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.LINE_END;
         this.add(salir,constraints);
+
+        imageDado = new ImageIcon(getClass().getResource("/resources/dado_6.png"));
+        dado1 = new JLabel(imageDado);
+        dado2 = new JLabel(imageDado);
+
+        panelDados = new JPanel();
+        panelDados.setPreferredSize(new Dimension(450, 300));
+        panelDados.setBorder(BorderFactory.createTitledBorder("Tus dados"));
+        panelDados.add(dado1);
+        panelDados.add(dado2);
+
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.anchor = GridBagConstraints.CENTER;
+
+        add(panelDados,constraints);
+
+        resultadosDados = new JTextArea(4, 31);
+
+        resultadosDados.setBorder(BorderFactory.createTitledBorder("Resultados: "));
+        resultadosDados.setText("Debes lanzar los dados.");
+        constraints.gridx = 1;
+        constraints.gridy = 2;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.anchor = GridBagConstraints.CENTER;
+
+        add(resultadosDados,constraints);
+
+        lanzar = new JButton("lanzar");
+        lanzar.addActionListener(escucha);
+
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+        constraints.gridwidth = 2;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.anchor = GridBagConstraints.CENTER;
+
+        add(lanzar,constraints);
+
+        mensajeSalida = new JTextArea(4, 31);
+        mensajeSalida.setText("Usa el botón (?) para ver las instrucciones.");
+        mensajeSalida.setBorder(BorderFactory.createTitledBorder("Mensajes: "));
+        constraints.gridx = 0;
+        constraints.gridy = 4;
+        constraints.gridwidth = 2;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.anchor = GridBagConstraints.CENTER;
+
+        add(mensajeSalida,constraints);
+
+
+
+
     }
 
     /**
