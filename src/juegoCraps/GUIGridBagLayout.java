@@ -1,10 +1,12 @@
 package juegoCraps;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
+
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.Component;
@@ -105,6 +107,7 @@ public class GUIGridBagLayout extends JFrame {
 
         ayuda = new JButton("?");
         ayuda.addActionListener(escucha);
+        ayuda.setBackground(new Color(91, 192, 222));
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
@@ -113,6 +116,9 @@ public class GUIGridBagLayout extends JFrame {
         this.add(ayuda,constraints);
 
         salir = new JButton("Salir");
+        salir.setForeground(Color.WHITE);
+        salir.setBackground(Color.RED);
+        salir.setOpaque(true);
         salir.addActionListener(escucha);
         constraints.gridx = 1;
         constraints.gridy = 1;
@@ -153,8 +159,14 @@ public class GUIGridBagLayout extends JFrame {
 
         add(resultadosDados,constraints);
 
-        lanzar = new JButton("lanzar");
+        lanzar = new JButton("Tirar");
         lanzar.addActionListener(escucha);
+        lanzar.setBorder(new RoundBtn(8));
+        lanzar.setPreferredSize(new Dimension(120,30));
+
+        //lanzar.setForeground(Color.WHITE);
+        lanzar.setBackground(new Color(92, 184, 92));
+        lanzar.setOpaque(true);
 
         constraints.gridx = 0;
         constraints.gridy = 3;
@@ -193,7 +205,23 @@ public class GUIGridBagLayout extends JFrame {
             GUIGridBagLayout miProjectGUI = new GUIGridBagLayout();
         });
     }
-
+    class RoundBtn implements Border
+    {
+        private int r;
+        RoundBtn(int r) {
+            this.r = r;
+        }
+        public Insets getBorderInsets(Component c) {
+            return new Insets(this.r+1, this.r+1, this.r+2, this.r);
+        }
+        public boolean isBorderOpaque() {
+            return true;
+        }
+        public void paintBorder(Component c, Graphics g, int x, int y,
+                                int width, int height) {
+            g.drawRoundRect(x, y, width-1, height-1, r, r);
+        }
+    }
 
     private class Escucha implements ActionListener {
 
