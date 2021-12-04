@@ -2,6 +2,14 @@ package juegoCraps;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.Component;
+import java.awt.Point;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -24,18 +32,56 @@ public class GUIGridBagLayout extends JFrame {
     private  JSeparator separator;
     private Escucha escucha;
     private ModelCraps modelCraps;
+    private Point initialClick;
+
+
+
+
 
     public GUIGridBagLayout(){
         initGUI();
 
         //Default JFrame configuration
+
         this.setTitle("Juego Craps");
+        this.setUndecorated(true);
+        this.setBackground(new Color(255, 255, 255, 0));
         this.pack();
-        this.setResizable(true);
+        //this.setResizable(true);
         this.setVisible(true);
+
         this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        this.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                initialClick = e.getPoint();
+                getComponentAt(initialClick);
+            }
+        });
+
+        this.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+
+                // get location of Window
+                int thisX = getLocation().x;
+                int thisY = getLocation().y;
+
+                // Determine how much the mouse moved since the initial click
+                int xMoved = e.getX() - initialClick.x;
+                int yMoved = e.getY() - initialClick.y;
+
+                // Move window to this position
+                int X = thisX + xMoved;
+                int Y = thisY + yMoved;
+                setLocation(X, Y);
+            }
+        });
+
     }
+
+
 
     public void initGUI(){
         //Set up JFrame Container's Layout
@@ -45,6 +91,8 @@ public class GUIGridBagLayout extends JFrame {
         //Create Listener Object or Control Object
         escucha = new Escucha();
         modelCraps = new ModelCraps();
+
+
         //Set up JComponents
 
         headerProject = new Header("Mesa de Juego Craps", Color.BLACK);
@@ -95,6 +143,8 @@ public class GUIGridBagLayout extends JFrame {
 
         resultadosDados.setBorder(BorderFactory.createTitledBorder("Resultados: "));
         resultadosDados.setText("Debes lanzar los dados.");
+        resultadosDados.setBackground(null);
+        resultadosDados.setEditable(false);
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.gridwidth = 1;
@@ -117,6 +167,8 @@ public class GUIGridBagLayout extends JFrame {
         mensajeSalida = new JTextArea(4, 31);
         mensajeSalida.setText("Usa el botón (?) para ver las instrucciones.");
         mensajeSalida.setBorder(BorderFactory.createTitledBorder("Mensajes: "));
+        resultadosDados.setBackground(null);
+        mensajeSalida.setEditable(false);
         constraints.gridx = 0;
         constraints.gridy = 4;
         constraints.gridwidth = 2;
@@ -130,6 +182,7 @@ public class GUIGridBagLayout extends JFrame {
 
     }
 
+
     /**
      * Main process of the Java program
      * @param args Object used in order to send input data from command line when
@@ -141,23 +194,31 @@ public class GUIGridBagLayout extends JFrame {
         });
     }
 
+
     private class Escucha implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            modelCraps.calcularTiro();
-            int[] caras = modelCraps.getCaras();
-            imageDado = new ImageIcon(getClass().getResource("/resources/"+caras[0]+".png"));
-            dado1.setIcon(imageDado);
-            imageDado = new ImageIcon(getClass().getResource("/resources/"+caras[1]+".png"));
-            dado2.setIcon(imageDado);
+          if(e.getSource() == lanzar){
+              modelCraps.calcularTiro();
+              int[] caras = modelCraps.getCaras();
+              imageDado = new ImageIcon(getClass().getResource("/resources/"+caras[0]+".png"));
+              dado1.setIcon(imageDado);
+              imageDado = new ImageIcon(getClass().getResource("/resources/"+caras[1]+".png"));
+              dado2.setIcon(imageDado);
+              modelCraps.determinarJuego();
+              resultadosDados.setText(modelCraps.getEstadoToString()[0]);
+              mensajeSalida.setText(modelCraps.getEstadoToString()[1]);
 
-            modelCraps.determinarJuego();
-
-            resultadosDados.setText(modelCraps.getEstadoToString()[0]);
-            mensajeSalida.setRows(4);
-            mensajeSalida.setText(modelCraps.getEstadoToString()[1]);
+          }else{
+              if(e.getSource() == ayuda){
+                  JOptionPane.showMessageDialog(null, MENSAJE_INICIO);
+              }else{
+                  System.exit(0);
+              }
+          }
 
         }
     }
+
 }
