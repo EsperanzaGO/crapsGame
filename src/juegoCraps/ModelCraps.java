@@ -96,7 +96,7 @@ public class ModelCraps {
      */
     public String getEstadoToString() {
         switch (estado){
-            case 1: estadoToString = "Has sacado natutal. ¡Ganaste!";
+            case 1: estadoToString = "Has sacado natural. ¡Ganaste!";
                     break;
             case 2: estadoToString = "Has sacado Caps. ¡Perdiste!";
                     break;

@@ -5,16 +5,28 @@ import java.awt.*;
 import java.awt.event.*;
 
 /**
- * This class is used for show use MouseListener, MouseMotionListener and KeyListener
+ * This class is used for view Class, MouseMotionListener and KeyListener
  * @autor Paola-J Rodriguez-C paola.rodriguez@correounivalle.edu.co
  * @version v.1.0.0 date:22/11/2021
  */
 public class GUI extends JFrame {
+    private static final  String MENSAJE_INICIO = "Bienvenido a Craps \n"
+            + "Oprime el botón lanzar para iniciar el juego"
+            + "\n Si tu tiro de salida es 7 u 11 ganas con Natural"
+            + "\n Si tu tiro de salida es 2, 3  o 12 pierdes con Craps"
+            + "\n Si sacas cualquier otro valor establecerás el Punto."
+            + "\n Estado en punto podrás seguir lanzando los dados, "
+            + "\n pero ganarás si sacas nuevamente el valor del Punto"
+            + "\n sin que previamente hayas sacado 7.";
 
     private Header headerProject;
-    private JPanel panelMouse;
-    private JTextArea mensajes;
+    private JLabel dado1, dado2;
+    private JButton lanzar;
+    private JPanel panelDados, panelResultados;
+    private ImageIcon imageDado;
+    private JTextArea resultados;
     private Escucha escucha;
+    private ModelCraps modelCraps;
 
     /**
      * Constructor of GUI class
@@ -23,7 +35,7 @@ public class GUI extends JFrame {
         initGUI();
 
         //Default JFrame configuration
-        this.setTitle("MouseListener, MouseMotionListener and KeyListener");
+        this.setTitle("Juego Craps");
         this.pack();
         this.setResizable(true);
         this.setVisible(true);
@@ -37,26 +49,39 @@ public class GUI extends JFrame {
      */
     private void initGUI() {
         //Set up JFrame Container's Layout
-        //Create Listener Object and Control Object
+        //Create Listener Object or Control Object
         escucha = new Escucha();
+        modelCraps = new ModelCraps();
         //Set up JComponents
-        headerProject = new Header("Manejando Escuchas del Mouse y del Teclado", Color.BLACK);
-        this.add(headerProject,BorderLayout.NORTH); //Change this line if you change JFrame Container's Layout
 
-        panelMouse = new JPanel();
-        panelMouse.addMouseListener(escucha);
-        panelMouse.addMouseMotionListener(escucha);
-        panelMouse.addKeyListener(escucha);
-        panelMouse.setFocusable(true);
-        panelMouse.setBackground(Color.BLUE);
-        panelMouse.setPreferredSize(new Dimension(600,120));
+        headerProject = new Header("Mesa de Juego Craps", Color.BLACK);
+        this.add(headerProject,BorderLayout.NORTH);
 
-        mensajes = new JTextArea(7,3);
-        mensajes.setEditable(false);
-        JScrollPane scroll = new JScrollPane(mensajes);
+        imageDado = new ImageIcon(getClass().getResource("/resources/dado_6.png"));
+        dado1 = new JLabel(imageDado);
+        dado2 = new JLabel(imageDado);
 
-        add(panelMouse,BorderLayout.CENTER);
-        add(scroll,BorderLayout.SOUTH);
+        lanzar = new JButton("lanzar");
+        lanzar.addActionListener(escucha);
+
+
+        panelDados = new JPanel();
+        panelDados.setPreferredSize(new Dimension(450, 300));
+        panelDados.setBorder(BorderFactory.createTitledBorder("Tus dados"));
+        panelDados.add(dado1);
+        panelDados.add(dado2);
+        panelDados.add(lanzar);
+
+        this.add(panelDados, BorderLayout.CENTER);
+
+        resultados = new JTextArea(7, 31);
+
+        resultados.setText(MENSAJE_INICIO);
+        resultados.setBorder(BorderFactory.createTitledBorder("Lo que debes hacer"));
+        JScrollPane scroll = new JScrollPane(resultados);
+        this.add(scroll, BorderLayout.EAST);
+
+
     }
 
     /**
@@ -73,66 +98,21 @@ public class GUI extends JFrame {
     /**
      * inner class that extends an Adapter Class or implements Listeners used by GUI class
      */
-    private class Escucha implements MouseListener, MouseMotionListener, KeyListener {
+    private class Escucha implements ActionListener {
 
         @Override
-        public void mouseClicked(MouseEvent e) {
-            panelMouse.setBackground(Color.CYAN);
-            mensajes.append("mouseClicked was detected \n");
-        }
+        public void actionPerformed(ActionEvent e) {
+            modelCraps.calcularTiro();
+            int[] caras = modelCraps.getCaras();
+            imageDado = new ImageIcon(getClass().getResource("/resources/"+caras[0]+".png"));
+            dado1.setIcon(imageDado);
+            imageDado = new ImageIcon(getClass().getResource("/resources/"+caras[1]+".png"));
+            dado2.setIcon(imageDado);
 
-        @Override
-        public void mousePressed(MouseEvent e) {
-           panelMouse.setBackground(Color.pink);
-           mensajes.append("mousePressed was detected \n");
-        }
+            modelCraps.determinarJuego();
+            resultados.setText(modelCraps.getEstadoToString());
 
-        @Override
-        public void mouseReleased(MouseEvent e) {
-            panelMouse.setBackground(Color.BLACK);
-            mensajes.append("mouseReleased was detected \n");
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-            panelMouse.setBackground(Color.GRAY);
-            mensajes.append("mouseEntered was detected \n");
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-            panelMouse.setBackground(Color.YELLOW);
-            mensajes.append("mouseExited was detected \n");
-        }
-
-        @Override
-        public void mouseDragged(MouseEvent e) {
-            mensajes.append("mouseDragged was detected \n"+
-                    "Mouse position x = "+e.getX()+" Mouse position y = "+e.getY()+"\n");
-        }
-
-        @Override
-        public void mouseMoved(MouseEvent e) {
-             mensajes.append("mouseMoved was detected \n"+
-                             "Mouse position x = "+e.getX()+" Mouse position y = "+e.getY()+"\n");
-        }
-
-        @Override
-        public void keyTyped(KeyEvent e) {
-            mensajes.append("keyTyped was detected \n"+
-                            "Tecla alfa numérica = "+e.getKeyChar()+"\n");
-        }
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-            mensajes.append("keyTyped was detected \n"+
-                            "Tecla = "+e.getKeyChar()+"\n");
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-            mensajes.append("keyReleased was detected \n"+
-                            "Tecla = "+e.getKeyChar()+"\n");
         }
     }
+
 }
