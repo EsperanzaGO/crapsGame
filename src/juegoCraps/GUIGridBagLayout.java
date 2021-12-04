@@ -39,7 +39,9 @@ public class GUIGridBagLayout extends JFrame {
 
 
 
-
+    /**
+     * Constructor of GUI class
+     */
     public GUIGridBagLayout(){
         initGUI();
 
@@ -83,7 +85,10 @@ public class GUIGridBagLayout extends JFrame {
 
     }
 
-
+    /**
+     * This method is used to set up the default JComponent Configuration,
+     * create Listener and control Objects used for the GUI class
+     */
 
     public void initGUI(){
         //Set up JFrame Container's Layout
@@ -188,11 +193,7 @@ public class GUIGridBagLayout extends JFrame {
         constraints.gridwidth = 2;
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.CENTER;
-
         add(mensajeSalida,constraints);
-
-
-
 
     }
 
@@ -207,6 +208,10 @@ public class GUIGridBagLayout extends JFrame {
             GUIGridBagLayout miProjectGUI = new GUIGridBagLayout();
         });
     }
+
+    /**
+     * Establish border button
+     */
     class RoundBtn implements Border
     {
         private int r;
@@ -224,7 +229,9 @@ public class GUIGridBagLayout extends JFrame {
             g.drawRoundRect(x, y, width-1, height-1, r, r);
         }
     }
-
+    /**
+     * inner class that extends an Adapter Class or implements Listeners used by GUI class
+     */
     private class Escucha implements ActionListener {
 
         @Override
