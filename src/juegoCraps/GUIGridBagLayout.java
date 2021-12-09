@@ -110,10 +110,17 @@ public class GUIGridBagLayout extends JFrame {
 
         this.add(headerProject,constraints);
 
-        ayuda = new JButton("?");
+        ayuda = new JButton("");
         ayuda.addActionListener(escucha);
-        ayuda.setBackground(new Color(91, 192, 222));
-        ayuda.setForeground(Color.WHITE);
+        ayuda.setOpaque(true);
+        ayuda.setIcon(new ImageIcon(getClass().getResource("/resources/ayuda2.png")));
+        ayuda.setPreferredSize(new Dimension(30,30));
+        //ayuda.setMargin(new Insets(0, 0, 0, 0));
+        ayuda.setBorder(null);
+        ayuda.setContentAreaFilled(false);
+        ayuda.setFocusable(true);
+       // ayuda.setBackground(new Color(91, 192, 222));
+       // ayuda.setForeground(Color.WHITE);
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
@@ -139,7 +146,7 @@ public class GUIGridBagLayout extends JFrame {
 
         panelDados = new JPanel();
         panelDados.setPreferredSize(new Dimension(450, 250));
-        panelDados.setBorder(BorderFactory.createTitledBorder("Tus dados"));
+        panelDados.setBorder(BorderFactory.createTitledBorder("Tus dados:"));
         panelDados.add(dado1);
         panelDados.add(dado2);
 
